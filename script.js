@@ -4,14 +4,13 @@
 // 🚨 [중요] 1단계에서 복사한 본인의 키값으로 아래 내용을 바꿔주세요!
 // =========================================================
 const firebaseConfig = {
-  apiKey: "AIzaSyD4m17c3vdKM4p1c0sp0CJ6fetUwf5A0xA",
-  authDomain: "pharmacy-sch-251127.firebaseapp.com",
-  projectId: "pharmacy-sch-251127",
-  storageBucket: "pharmacy-sch-251127.firebasestorage.app",
-  messagingSenderId: "1028219799154",
-  appId: "1:1028219799154:web:669dc1a10e7a1f5f8f64eb"
+  apiKey: "AIzaSyADuaGSpLgObmCFYaxKxqniyTYJxxMsY6c",
+  authDomain: "pharmacy-aewol.firebaseapp.com",
+  projectId: "pharmacy-aewol",
+  storageBucket: "pharmacy-aewol.firebasestorage.app",
+  messagingSenderId: "73443782159",
+  appId: "1:73443782159:web:1b1a9fd4e829bf2384fd7a"
 };
-
 
 
 // --- 파이어베이스 초기화 ---

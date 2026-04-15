@@ -1,0 +1,693 @@
+/* style.css : 2025-11-28 최종 통합 완전판 */
+
+/* =========================================
+   1. 기본 변수 및 초기화
+   ========================================= */
+:root {
+    --bg-color: #f4f7f6;       /* 전체 배경색 */
+    --card-bg: #ffffff;        /* 카드 배경색 */
+    --border-color: #e0e0e0;   /* 테두리 색 */
+    
+    --primary-color: #4a90e2;  /* 메인 강조색 (파랑) */
+    --success-color: #5cb85c;  /* 저장/추가 (초록) */
+    --danger-color: #e74c3c;   /* 삭제/취소 (빨강) */
+    --text-color: #333333;     /* 기본 글자색 */
+    --input-bg: #f9f9f9;       /* 입력창 배경 */
+    
+    --sunday-color: #ff6b6b;   /* 일요일 색 */
+    --saturday-color: #4a90e2; /* 토요일 색 */
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* =========================================
+   2. 상단 헤더 영역
+   ========================================= */
+.main-header {
+    width: 100%;
+    max-width: 1600px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#main-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+    word-break: keep-all; 
+}
+
+.btn-settings {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #555;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.btn-settings:hover {
+    background: #eee;
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   3. 메인 레이아웃 (달력 + 사이드바)
+   ========================================= */
+.main-container {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    max-width: 1600px;
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* --- 왼쪽: 달력 섹션 --- */
+.calendar-section {
+    flex: 3;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.year-month {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.btn-nav {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #20c997;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: opacity 0.2s;
+}
+.btn-nav:hover { opacity: 0.9; }
+
+/* 달력 그리드 */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+}
+
+.day-header {
+    background: #f8f9fa;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+.day-header.sun { color: var(--sunday-color); }
+.day-header.sat { color: var(--saturday-color); }
+
+.day-cell {
+    min-height: 120px;
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 5px;
+    position: relative;
+    cursor: pointer;
+    background: white;
+    transition: background-color 0.2s;
+}
+.day-cell:hover { background-color: #fafafa; }
+.day-cell.empty { background-color: #fcfcfc; cursor: default; }
+
+/* 날짜 숫자 */
+.date-num {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    line-height: 24px;
+    border-radius: 50%;
+}
+.day-cell.holiday .date-num { color: var(--sunday-color) !important; font-weight: bold; }
+.day-cell.sun .date-num { color: var(--sunday-color); }
+.day-cell.sat .date-num { color: var(--saturday-color); }
+
+/* 근무 바 */
+.shift-bar {
+    font-size: 0.75rem;
+    color: white;
+    padding: 3px 6px;
+    border-radius: 4px;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    font-weight: 500;
+}
+.shift-bar:hover {
+    transform: scale(1.02);
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* --- 오른쪽: 사이드바 --- */
+.sidebar-section {
+    flex: 1;
+    min-width: 250px;
+    border-left: 1px solid #eee;
+    padding-left: 20px;
+}
+
+.sidebar-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.employee-list { list-style: none; padding: 0; }
+
+.employee-item {
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    transition: opacity 0.2s, transform 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.employee-item:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* =========================================
+   4. 모달 (팝업창) 공통 스타일
+   ========================================= */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter: blur(2px);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 480px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    position: relative;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #aaa;
+}
+.close-btn:hover { color: #333; }
+
+/* =========================================
+   5. 입력 폼 (Form) 스타일
+   ========================================= */
+.form-group { margin-bottom: 15px; }
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #444;
+    font-size: 0.95rem;
+}
+
+select, input[type="text"], input[type="date"], input[type="password"], input[type="color"], textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: var(--input-bg);
+    font-size: 1rem;
+    outline: none;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+select:focus, input:focus, textarea:focus {
+    border-color: var(--primary-color);
+    background-color: #fff;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+input[readonly] { background-color: #eee; color: #777; }
+textarea { resize: vertical; min-height: 80px; }
+
+.time-select-row { display: flex; align-items: center; gap: 10px; }
+.time-select-row select { width: 48%; }
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed #eee;
+}
+input[type="checkbox"] { width: 20px; height: 20px; margin-right: 8px; cursor: pointer; }
+
+/* 버튼 그룹 */
+.btn-group { display: flex; gap: 10px; margin-top: 25px; }
+
+/* =========================================
+   💾 설정 저장 버튼 리뉴얼 (둥글고 세련되게)
+   ========================================= */
+.btn-save {
+    /* 1. 크기와 배치 */
+    width: 100%;             /* 가로로 꽉 차게 */
+    padding: 16px 0;         /* 위아래 두툼하게 (터치감 향상) */
+    margin-top: 25px !important; /* 위쪽 목록과 확실히 띄우기 */
+    
+    /* 2. 색상과 배경 */
+    background-color: #4CAF50; /* 쨍하고 깔끔한 초록색 */
+    color: white;
+    
+    /* 3. 모양 (핵심 포인트) */
+    border: none;
+    border-radius: 12px;     /* ★ 모서리를 둥글게 깎음 (아이폰 스타일) */
+    
+    /* 4. 폰트 */
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    
+    /* 5. 입체감 (그림자) */
+    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3); /* 아래에 은은한 그림자 */
+    transition: all 0.2s ease; /* 마우스 올렸을 때 부드럽게 변함 */
+}
+
+/* 마우스 올렸을 때 효과 */
+.btn-save:hover {
+    background-color: #43A047;     /* 색깔이 살짝 진해짐 */
+    transform: translateY(-2px);   /* 버튼이 살짝 공중부양 */
+    box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4); /* 그림자도 같이 뜸 */
+}
+
+/* 클릭했을 때 (누르는 느낌) */
+.btn-save:active {
+    transform: translateY(0);      /* 다시 제자리로 */
+    box-shadow: 0 2px 5px rgba(76, 175, 80, 0.2);
+}
+.btn-delete {
+    width: 60px;
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-delete:hover { background-color: #c0392b; }
+
+/* =========================================
+   6. 통계 모달 스타일 (리포트용 압축 버전)
+   ========================================= */
+#stats-modal .modal-content {
+    max-width: 1000px;
+    width: 95%;
+    padding: 15px;
+    margin: 2% auto;
+}
+
+#stats-table-container { margin-top: 10px; }
+
+.stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.stats-table th {
+    background-color: #f1f3f5;
+    position: sticky; top: 0; z-index: 1;
+    font-weight: bold; color: #444;
+    padding: 6px 4px;
+    border-bottom: 2px solid #ccc;
+}
+
+.stats-table td {
+    padding: 4px 4px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    color: #333;
+    height: 30px;
+}
+
+.stats-day.sun { color: var(--sunday-color); font-weight: bold; }
+.stats-day.sat { color: var(--saturday-color); font-weight: bold; }
+
+.report-summary {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #fcfcfc;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    display: flex; flex-direction: column; gap: 5px;
+}
+.report-summary h3 { font-size: 1rem; margin: 0 0 5px 0; color: #333; }
+.report-summary ul { list-style: none; padding: 0; margin: 0; display: flex; gap: 20px; }
+.report-summary li { font-size: 0.9rem; color: #555; margin: 0; }
+.report-total { margin-top: 5px; padding-top: 5px; border-top: 1px dashed #ddd; font-size: 1.1rem; font-weight: bold; color: var(--primary-color); text-align: right; }
+
+#stats-period { margin-bottom: 10px; font-size: 1rem; font-weight: bold; color: #555; }
+#stats-emp-select { padding: 5px; font-size: 0.9rem; height: 35px; }
+
+/* =========================================
+   7. 환경설정 (직원 관리) 스타일
+   ========================================= */
+/* 환경설정 모달 창 확장 */
+#settings-modal .modal-content {
+    max-width: 600px;
+    height: 90vh; /* PC에서도 길게 */
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+}
+
+/* 내부 영역 설정 */
+#settings-modal .settings-section { flex: none; }
+#settings-modal .settings-section:last-of-type {
+    flex: 1; /* 남은 공간 다 차지 */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+/* PC용 직원 목록 스타일 (높이 강제 지정 버전) */
+.emp-manage-list {
+    /* flex: 1;  <-- 이거 지우세요! 이게 문제였을 수 있습니다. */
+    
+    height: 400px; /* ★ 핵심: 높이를 400px로 강하게 고정 (5~6명 충분히 보임) */
+    
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+    background: white;
+}
+.emp-manage-item {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px; padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+.emp-manage-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+/* 색상 선택기 확대 */
+.emp-manage-item input[type="color"] {
+    width: 40px !important;
+    height: 40px !important;
+    padding: 2px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.emp-add-row { display: flex; gap: 10px; margin-top: 5px; }
+/* 삭제 버튼 스타일 (수정됨) */
+.btn-sm-del {
+    background: var(--sunday-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    
+    /* 상하 패딩을 8px -> 4px로 줄여서 납작하게 만듭니다 */
+    padding: 4px 10px; 
+    
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+/* =========================================
+   🚨 8. 모바일 반응형 (화면 폭 768px 이하)
+   ========================================= */
+@media screen and (max-width: 768px) {
+    body { padding: 10px; }
+    #main-title { font-size: 1.5rem; }
+
+    /* 레이아웃 세로 정렬 */
+    .main-container { flex-direction: column; padding: 10px; gap: 15px; }
+    .calendar-section, .sidebar-section { width: 100%; flex: none; }
+    .sidebar-section { border-left: none; border-top: 2px solid #eee; padding-left: 0; padding-top: 20px; }
+
+    /* 달력 요소 크기 축소 */
+    .header { margin-bottom: 10px; }
+    .year-month { font-size: 1.3rem; }
+    .btn-nav { padding: 6px 10px; font-size: 0.85rem; }
+    .day-cell { min-height: 80px; padding: 2px; }
+    .date-num { font-size: 0.8rem; width: 20px; height: 20px; line-height: 20px; }
+    .shift-bar { font-size: 0.7rem; padding: 2px 4px; margin-bottom: 1px; }
+    .day-header { padding: 5px; font-size: 0.85rem; }
+
+    /* 🚨 모달 창 스타일 (중앙 정렬) */
+    .modal { align-items: center; justify-content: center; }
+    .modal[style*="display: block"] { display: flex !important; }
+
+    .modal-content {
+        width: 95%; margin: 0; padding: 20px;
+        max-height: 90vh; overflow-y: auto;
+        display: flex; flex-direction: column;
+    }
+
+    /* 🚨 환경설정 모달 높이 강제 지정 */
+    #settings-modal .modal-content { height: 85vh; }
+
+    /* 🚨 직원 목록 리스트 강제 확장 */
+    .emp-manage-list {
+        flex: 1; /* 남은 공간 채우기 */
+        min-height: 300px; /* 최소 확보 */
+        max-height: none;
+        overflow-y: auto;
+    }
+
+    /* 색상 선택기 터치 쉽게 확대 */
+    input[type="color"] { height: 45px !important; width: 100%; border-radius: 4px; }
+    .emp-add-row { flex-direction: column; gap: 10px; }
+    .emp-add-row input[type="color"] { width: 100%; }
+
+    /* 폰트 크기 최적화 */
+    select, input, textarea, label, .btn-save { font-size: 16px; }
+}
+
+/* --- 커스텀 색상 선택기 스타일 --- */
+.color-swatch {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* 동그라미 모양 */
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.1s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.color-swatch:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+.color-swatch.selected {
+    border: 2px solid #333; /* 선택된 색 테두리 */
+    transform: scale(1.1);
+}
+
+/* 🔒 지난 날짜 잠금 스타일 */
+.date-locked {
+    background-color: #f2f2f2 !important; /* 회색 배경 */
+    color: #bbb !important;               /* 글자도 흐릿하게 */
+    pointer-events: none;                 /* ★핵심: 클릭 아예 불가능하게 막음 */
+    opacity: 0.7;
+}
+
+/* 잠긴 날짜 안에 있는 근무자 이름도 흐릿하게 */
+.date-locked .schedule-bar {
+    opacity: 0.5;
+    background-color: #999 !important; /* 색상 흑백처리 (선택사항) */
+}
+
+/* =========================================
+   🛠️ 환경설정: 직원 관리 리스트 디자인 수정
+   ========================================= */
+
+/* 1. 직원 목록 박스 (스크롤 생기게) */
+#settings-emp-list {
+    max-height: 250px;         /* 높이 제한 */
+    overflow-y: auto;          /* 내용 많으면 스크롤 */
+    border: 1px solid #e0e0e0; /* 테두리 */
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #fafafa;
+    border-radius: 8px;
+}
+
+/* 2. 직원 한 줄 (가로로 예쁘게 정렬) */
+.emp-row {
+    display: flex;             /* ★핵심: 가로 배치 */
+    align-items: center;       /* 위아래 중앙 정렬 */
+    padding: 8px 5px;
+    border-bottom: 1px solid #eee;
+    background: white;
+}
+
+/* 3. 색상 원 */
+.color-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+/* 4. 직원 이름 */
+.emp-row span {
+    flex-grow: 1;              /* 남은 공간 꽉 채우기 */
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+}
+
+/* 5. 삭제 버튼 (작고 빨갛게) */
+.btn-delete {
+    background-color: #ff5252; /* 예쁜 빨강 */
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 20px;       /* 둥글게 */
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.btn-delete:hover {
+    background-color: #ff0000; /* 마우스 올리면 진해짐 */
+}
+
+/* 6. 새 직원 추가 입력칸 정렬 */
+.emp-add-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.emp-add-row input[type="text"] {
+    flex-grow: 1; /* 입력창 길게 */
+}
+/* =========================================
+   🎨 색상 버튼 & 입력창 디자인 복구
+   ========================================= */
+
+/* 1. 전체 줄 맞춤 */
+.emp-row {
+    display: flex !important;
+    align-items: center;
+    padding: 8px 5px;
+    border-bottom: 1px solid #eee;
+    width: 100%;
+}
+
+/* 2. 색상 버튼 (못생긴 테두리 싹 없애고 원형으로) */
+.edit-color {
+    /* 브라우저 기본 스타일 강제 제거 */
+    -webkit-appearance: none;
+    appearance: none;
+    
+    /* 크기 및 배경 설정 */
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-right: 10px;
+}
+
+/* 크롬/엣지 브라우저 내부의 네모난 색상 영역을 동그랗게 깎기 */
+.edit-color::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%; /* 여기서 동그라미가 됩니다 */
+    padding: 0;
+}
+.edit-color::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+/* 3. 이름 입력창 (평소엔 투명, 클릭하면 흰색) */
+.edit-name {
+    flex-grow: 1;
+    border: 1px solid transparent; 
+    background-color: transparent;
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    padding: 6px 10px;
+    margin-right: 10px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+/* 마우스 올리거나 입력 중일 때 */
+.edit-name:hover {
+    border: 1px solid #ddd;
+    background-color: #fff;
+}
+.edit-name:focus {
+    border: 1px solid #4CAF50; /* 입력 시 초록 테두리 */
+    background-color: #fff;
+    outline: none;
+}
